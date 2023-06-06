@@ -887,3 +887,4 @@ bitcoincash:qz85u8f7ddke8h9aqrxnyupazhusga5axvygr3njep 0.004000
 bitcoincash:qz8yh6an4965ulrtrytdu9ltdxtwrctanswkuxtcgl 0.002000
 bitcoincash:qpnze0686jfmxvnvku4gugfskewftvpzu5xx44nrh4 0.104000
 bitcoincash:qq9s2m7tx3k2qylcaent53lmgdny3z4ljsa8hu9qcs 0.002000
+bitcoincash:qregzk00kp92q03vynkm8dsf0mmkv5dcau8f5sajtf 0.002000
