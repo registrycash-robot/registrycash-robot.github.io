@@ -1,0 +1,50 @@
+<html>
+<head>
+<script src="tokens.js"></script>
+<script src="https://cdn.mainnet.cash/mainnet-1.1.31.js"
+ integrity="sha384-QANTpvfG/5V7f2CGVt9UcZ6+MLb1KQyU2pbLYBo83LYGtqbyPBwglf1xjbrmRQDo"
+ crossorigin="anonymous"></script>
+</head>
+<body>
+<div id="table"></div>
+<script>
+document.addEventListener("DOMContentLoaded", async (event) => {
+  globalThis.exports = globalThis.exports || {};
+  Object.assign(globalThis, await __mainnetPromise);
+  const params = new URL(window.location.href).searchParams;
+  var addr = params.get('addr');
+  if(addr) {
+    if(!addr.startsWith("bitcoincash:")) {
+      addr = "bitcoincash:"+addr
+    }
+    var shortAddr = addr.substr(12)
+    const wallet = await Wallet.watchOnly(addr);
+    const bchBalance = await wallet.getBalance();
+    const allBalances = await wallet.getAllTokenBalances();
+    var balanceArr = []
+    for(const category in allBalances) {
+      const balance = allBalances[category];
+      var tokenInfo = TOKENS[category];
+      if(!tokenInfo) {
+        tokenInfo = {decimal: 0, symbol: "❓"}
+      }
+      balanceArr.push({category:category, decimal:tokenInfo.decimal, symbol:tokenInfo.symbol, balance:balance});
+    }
+    balanceArr.sort((a, b) => (a.symbol.localeCompare(b.symbol)));
+    var tblStr = '<table style="margin-left: auto; margin-right: auto;"><thead><tr>\n';
+    tblStr += '<th>Symbol</th><th>Balance</th><th>Category</th></tr></thead><tbody>\n';
+    tblStr += `<tr><td>BCH</td><td>${bchBalance.bch}</td><td></td></tr>`;
+    for(const elem of balanceArr) {
+      const balance = elem.balance/Math.pow(10, elem.decimal);
+      //console.log("balance", balance, elem.balance, elem);
+      tblStr += `<tr><td>${elem.symbol}</td><td>${balance}</td>`;
+      tblStr += `<td><input type="text" value="${elem.category}" readonly></td></tr>`;
+    }
+    tblStr += '</tbody></table>\n';
+    document.getElementById("table").innerHTML = "<center><b>"+shortAddr+"</b></center><br/>"+tblStr;
+  }
+});
+</script>
+</body>
+</html>
+
